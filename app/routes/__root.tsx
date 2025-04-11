@@ -6,6 +6,7 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  Link,
 } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
@@ -24,6 +25,7 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFoundComponent,
 });
 
 function RootComponent() {
@@ -34,13 +36,29 @@ function RootComponent() {
   );
 }
 
+function NotFoundComponent() {
+  return (
+    <main className="flex-grow flex items-center justify-center">
+      <div>
+        <h1 className="text-5xl font-bold">404 Not Found</h1>
+        <p>
+          <span className="opacity-60">Go back to the </span>
+          <Link to="/" className="text-green-600 hover:underline">
+            Home page
+          </Link>
+        </p>
+      </div>
+    </main>
+  );
+}
+
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="bg-black/95 text-white flex flex-col min-h-screen">
         {children}
         <Scripts />
       </body>
