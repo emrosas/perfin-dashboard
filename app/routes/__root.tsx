@@ -1,5 +1,5 @@
 // app/routes/__root.tsx
-import "../styles/app.css";
+import styles from "@/app/styles/app.css?url";
 import type { ReactNode } from "react";
 import {
   Outlet,
@@ -20,7 +20,13 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Perfin",
+      },
+    ],
+    links: [
+      {
+        rel: "stylesheet",
+        href: styles,
       },
     ],
   }),

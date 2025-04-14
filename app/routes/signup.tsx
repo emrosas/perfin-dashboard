@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { createWalletFn } from "./_transactions";
 
 export const Route = createFileRoute("/signup")({
   beforeLoad: async () => {
@@ -27,12 +29,14 @@ function SignIn() {
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
+  const createWallet = useServerFn(createWalletFn);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPending(true);
     setError("");
 
-    const { error } = await authClient.signUp.email({
+    const { data, error } = await authClient.signUp.email({
       name,
       email,
       password,
@@ -44,12 +48,18 @@ function SignIn() {
       return;
     }
 
-    setEmail("");
-    setPassword("");
-    setName("");
-    setPending(false);
+    const { success } = await createWallet({ data: { id: data.user.id } });
 
-    router.navigate({ to: "/dashboard" });
+    if (success) {
+      setEmail("");
+      setPassword("");
+      setName("");
+      setPending(false);
+      router.navigate({ to: "/dashboard" });
+    } else {
+      setError("Failed to create wallet");
+      setPending(false);
+    }
   };
 
   return (
