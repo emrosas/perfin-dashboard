@@ -1,17 +1,28 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { authClient } from "../lib/auth-client";
+import { auth } from "../lib/server/auth";
+import { getWebRequest } from "@tanstack/react-start/server";
+import { SignIn } from "./signin";
 
 export const Route = createFileRoute("/_authed")({
-  beforeLoad: async () => {
-    const { data, error } = await authClient.getSession();
-    if (!data?.session) {
-      return redirect({ to: "/signin" });
+  beforeLoad: async ({ context }) => {
+    const request = getWebRequest();
+    if (request === undefined) {
+      throw new Error("Request is undefined");
     }
-    if (error) throw new Error("Not authenticated");
+
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session) {
+      throw new Error("Not authenticated");
+    }
+
+    console.log(session);
+    return {
+      session,
+    };
   },
   errorComponent: ({ error }) => {
     if (error.message === "Not authenticated") {
-      return <div>Not authenticated</div>;
+      return <SignIn />;
     }
 
     throw error;

@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   return (
     <main className="flex items-center justify-center flex-grow">
-      <div className="border-white/10 border text-center rounded-lg bg-white/5 py-4 px-5">
+      <div className="border-white/10 border text-center rounded-lg bg-white/5 py-6 px-5">
         <h1 className="text-3xl font-medium">
           Welcome to <span className="text-orange-600">Perfin</span>
         </h1>

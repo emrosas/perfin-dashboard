@@ -2,6 +2,7 @@ import {
   createFileRoute,
   Link,
   redirect,
+  useNavigate,
   useRouter,
 } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
@@ -18,8 +19,8 @@ export const Route = createFileRoute("/signin")({
   component: SignIn,
 });
 
-function SignIn() {
-  const router = useRouter();
+export function SignIn() {
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -47,7 +48,7 @@ function SignIn() {
     setPassword("");
     setPending(false);
 
-    router.navigate({ to: "/dashboard" });
+    navigate({ to: "/dashboard", replace: true });
   };
 
   return (
